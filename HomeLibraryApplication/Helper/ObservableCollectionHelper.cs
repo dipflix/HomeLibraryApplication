@@ -34,7 +34,7 @@ namespace HomeLibraryApplication.Helper
         public static ObservableCollection<ActivityVM> CloneActivityVM(this ObservableCollection<ActivityVM> collection)
         {
             ObservableCollection<ActivityVM> res = new ObservableCollection<ActivityVM>();
-            collection.Foreach(item => res.Add(new ActivityVM(item.IsSelected, item.Name, item.EntityID)));
+            collection.Foreach(item => res.Add(new ActivityVM(false, item.Name, item.EntityID)));
             return res;
         }
     }

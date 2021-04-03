@@ -17,7 +17,7 @@ namespace HomeLibraryApplication.ViewModels.Base
 
         public bool IsSelected { 
             get => _isSelected;
-            set => _isSelected = value;
+            set =>Set(ref _isSelected, value);
         }
 
         public ActivityVM(bool isSelected, string name, int id)

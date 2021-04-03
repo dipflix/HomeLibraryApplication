@@ -15,9 +15,10 @@
                    />
             <StackPanel Margin="0 0 0 16">
                 <Label Content="Book name" Padding="0"  Margin="0 0 0 4"/>
-                <TextBox Grid.Column="0"  
-                             Padding="16 8 16 8"
-                             Margin="0"/>
+                <TextBox  Padding="16 8 16 8"
+                          Margin="0"
+                          Text="{Binding BookTitleFilter}"
+                         />
             </StackPanel>
             <StackPanel Margin="0 0 0 16">
                 <StackPanel>
@@ -25,7 +26,7 @@
                     <ListBox ItemsSource="{Binding GenreCheckBoxFilter}" Height="128" Margin="0 0 0 16">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -35,15 +36,22 @@
                     <ListBox ItemsSource="{Binding  AuthorCheckBoxFilter}" Height="128" VerticalAlignment="Stretch" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </StackPanel>
             </StackPanel>
-            <Button  Content="Filter"
+            <DockPanel HorizontalAlignment="Right">
+                <Button  Content="Filter"
+                     Padding="32 8 32 8"
+                     Command="{Binding FilterCommand}"/>
+                <Button  Content="Reset"
                      Padding="16 8 16 8"
-                     Command=""/>
+                         Margin="8 0 0 0"
+                     Command="{Binding FilterClearCommand}"/>
+                
+            </DockPanel>
         </StackPanel>
         <StackPanel Width="400">
             <Label Content="Books" FontSize="18" FontWeight="Bold"/>

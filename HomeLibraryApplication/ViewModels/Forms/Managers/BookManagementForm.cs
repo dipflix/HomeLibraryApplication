@@ -84,8 +84,6 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
                 AuthorCheckBoxFilter.SingleOrDefault(it => it.EntityID == author.Id).IsSelected = true;
             });
 
-
-
         }
 
 

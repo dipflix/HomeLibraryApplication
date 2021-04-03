@@ -21,7 +21,7 @@ namespace HomeLibraryApplication.ViewModels.Base
         private IDialogFormService _dialogFormService;
 
         public ObservableCollection<T> EntityData { get; private set; }
-        public CollectionViewSource RenderList { get; set; }
+        public virtual CollectionViewSource RenderList { get; set; }
 
         private T _selectedEntity = new object() as T;
         public T SelectedEntity

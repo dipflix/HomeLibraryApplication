@@ -17,7 +17,8 @@ namespace HomeLibraryApplication.ViewModels.Base
         public override void ActionExecute()
         {
         
-            if (FormType == ManagmentType.ADD)
+            if (FormType == ManagmentType
+                .ADD)
             {
                 Repository.Add(Entity);
                 EventAfterManagementExecute(Entity, ManagmentType.ADD);
