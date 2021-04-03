@@ -6,7 +6,8 @@ namespace HomeLibraryApplication.Ninject
 {
     public class ServiceLocator
     {
-        private IKernel _kernel;
+        private static IKernel _kernel;
+
         public ServiceLocator()
         {
             _kernel = new StandardKernel(new ServiceRegistrator());
@@ -17,10 +18,6 @@ namespace HomeLibraryApplication.Ninject
             get => _kernel.Get<ApplicationVM>();
         }
 
-        public FormContextBaseVM FormContextVM
-        {
-            get => _kernel.Get<FormContextBaseVM>();
-                }
 
     }
 }

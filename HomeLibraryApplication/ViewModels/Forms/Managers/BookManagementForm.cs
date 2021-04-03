@@ -1,5 +1,6 @@
 ﻿using HomeLibraryApplication.Enum;
 using HomeLibraryApplication.Helper;
+using HomeLibraryApplication.Validators;
 using HomeLibraryApplication.ViewModels.Base;
 using HomeLibraryApplication.Views.Managements;
 using HomeLibraryData.Models;
@@ -44,6 +45,8 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 
             FormType = ManagmentType.ADD;
             Entity = new Book() { Damaged = 10 };
+
+            Validator = new BookEntityValidator(Entity);
         }
 
         public BookManagementForm(
@@ -73,6 +76,7 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
                 PublisingDate = entity.PublisingDate
             };
 
+            Validator = new BookEntityValidator(Entity);
 
             Entity.Genres.Foreach(genre =>
             {
@@ -99,72 +103,36 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
         public override void ActionExecute()
         {
 
-            //GenreCheckBoxFilter.Foreach(item =>
-            //{
-
-            //    var t = Entity.Genres.SingleOrDefault(it => it.Id == item.EntityID);
-            //    if (t != null && item.IsSelected == false)
-            //    {
-
-            //        Entity.Genres.Remove(t);
-
-            //        t = null;
-            //    }
-            //    if (t == null && item.IsSelected == true)
-            //    {
-            //        var selected = Genres.Single(it => it.Id == item.EntityID);
-            //        if (selected != null)
-            //        {
-            //            Entity.Genres.Add(selected);
-
-            //        }
-
-            //        t = null;
-            //        selected = null;
-            //    }
-            //});
-
-            //foreach (var item in GenreCheckBoxFilter) {
-            //    var genre = Genres.Single(it => it.Id == item.EntityID);
-            //    var isContain = Entity.Genres.SingleOrDefault(it => it.Id == genre.Id).IsNotNull();
-
-
-
-            //    if (!isContain && item.IsSelected == true) {
-            //        Entity.Genres.Add(genre);
-            //    }
-
-            //    if (isContain && item.IsSelected == false) {
-            //        var entGenre = Entity.Genres.SingleOrDefault(it => it.Id == item.EntityID);
-            //        Entity.Genres.Remove(entGenre);
-            //    }
-
-            //  MessageBox.Show(isContain.ToString());
-            //}
-
-
-            AuthorCheckBoxFilter.Foreach(item =>
+            if (!Validator.Validate())
+                ValidatorErrorNotifyExecute();
+            else
             {
 
-                var t = Entity.Authors.SingleOrDefault(it => it.Id == item.EntityID);
-                if (t == null && item.IsSelected == true)
-                {
-                    var selected = Authors.Single(it => it.Id == item.EntityID);
-                    if (selected != null)
-                        Entity.Authors.Add(selected);
-                    t = null;
-                }
+                //Entity.Genres = Genres.Where(
+                //        it =>
+                //        GenreCheckBoxFilter
+                //        .Where(it => it.IsSelected)
+                //        .Any(c => c.EntityID == it.Id)
+                //        ).ToList();
 
-                if (t != null && item.IsSelected == false)
-                {
-                    Entity.Authors.Remove(t);
-                    t = null;
-                }
+                var test = Genres.Where(
+                        it =>
+                        GenreCheckBoxFilter
+                        .Where(it => it.IsSelected)
+                        .Any(c => c.EntityID == it.Id)
+                        ).ToList();
+                test.ForEach(it => Entity.Genres.Add(new Genre() { Id = it.Id }));
+                //Entity.Genres.AddItems(Genres.Where(
+                //        it =>
+                //        GenreCheckBoxFilter
+                //        .Where(it => it.IsSelected)
+                //        .Any(c => c.EntityID == it.Id)
+                //        ).ToList());
 
-            });
-
-            Entity.PicturePath = "/";
-            base.ActionExecute();
+                Entity.PicturePath = "/";
+                base.ActionExecute();
+            }
+           
         }
     }
 }

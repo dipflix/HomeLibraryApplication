@@ -7,5 +7,6 @@
              >
     <Application.Resources>
         <ninject:ServiceLocator x:Key="ServiceLocator"/>
+        
     </Application.Resources>
 </Application>

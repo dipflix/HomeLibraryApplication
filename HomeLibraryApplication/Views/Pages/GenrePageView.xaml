@@ -9,7 +9,8 @@
     <StackPanel Orientation="Horizontal">
         <StackPanel Width="400">
             <Label Content="Genres" FontSize="18" FontWeight="Bold"/>
-            <ListBox ItemsSource="{Binding RenderList.View}" SelectedItem="{Binding SelectedEntity}"
+            <ListBox ItemsSource="{Binding RenderList.View}" 
+SelectedItem="{Binding SelectedEntity}"
                       Background="Transparent"
                       Margin="0 16 0 0"
                       Height="256"

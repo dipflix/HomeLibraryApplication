@@ -6,6 +6,8 @@ using MathCore.CommandProcessor;
 using MathCore.WPF.Commands;
 using MathCore.WPF.ViewModels;
 using System;
+using System.Collections;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -17,6 +19,7 @@ namespace HomeLibraryApplication.ViewModels.Base
 
         private ICommand _actionManagementCommand;
         public event Action<Entity, ManagmentType> EventAfterManagement;
+
         public string Title { get; set; }
         public FrameworkElement ViewContext { get; set; }
         public ICommand ActionManagementCommand => _actionManagementCommand ??= new LambdaCommand(ActionExecute);
@@ -27,6 +30,7 @@ namespace HomeLibraryApplication.ViewModels.Base
         {
             throw new Exception("ActionExecute not init!");
         }
+
 
         public FormContextBaseVM(string title, FrameworkElement viewContext)
         {

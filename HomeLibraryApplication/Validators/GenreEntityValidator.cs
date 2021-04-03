@@ -6,20 +6,23 @@ using System.Windows.Controls;
 
 namespace HomeLibraryApplication.Validators
 {
-    public class GenreEntityValidator : ValidatorBase
+    public class GenreEntityValidator : ValidatorBase<Genre>
     {
-        public Type ValidationType { get; set; }
-        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        public GenreEntityValidator(Genre entity) : base(entity)
         {
-            Genre genre = (Genre)value;
-            bool isSuccessValidate = false;
+        }
 
+        public override bool Validate()
+        {
+            ErrorCollection.Clear();
 
+            if (string.IsNullOrWhiteSpace(Entity.Name))
+                ErrorCollection.Add(nameof(Entity.Name), "Must not be empty.");
 
+            if (string.IsNullOrWhiteSpace(Entity.Description))
+                ErrorCollection.Add(nameof(Entity.Description), "Must not be empty.");
 
-
-
-            return new ValidationResult(true, null);
+          return base.Validate();
         }
     }
 }

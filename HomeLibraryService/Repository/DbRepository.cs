@@ -47,7 +47,7 @@ namespace HomeLibraryService.Repository
         public async Task<T> AddAsync(T entity, CancellationToken Cancel = default)
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
-            _context.Entry(entity).State = EntityState.Added;
+            //_context.Entry(entity).State = EntityState.Added;
 
             if (AutoSave) await _context.SaveChangesAsync(Cancel).ConfigureAwait(false);
 
@@ -61,7 +61,7 @@ namespace HomeLibraryService.Repository
 
      
             var item = Get(entity.Id);
-       
+          
 
             _context.Entry(item).CurrentValues.SetValues(entity);
             
