@@ -47,7 +47,7 @@
                     <ListBox x:Name="ListAuthorComponent" ItemsSource="{Binding  AuthorCheckBoxFilter}" Height="128" VerticalAlignment="Stretch" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

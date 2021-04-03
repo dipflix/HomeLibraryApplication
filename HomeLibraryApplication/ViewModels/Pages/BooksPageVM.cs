@@ -6,15 +6,12 @@ using HomeLibraryService.Interfaces;
 using MathCore.WPF.Commands;
 using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Linq;
 using HomeLibraryApplication.Helper;
-using System.Windows;
-using System.Collections.Generic;
 using System.Windows.Input;
-using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace HomeLibraryApplication.ViewModels.Pages
 {
@@ -54,7 +51,7 @@ namespace HomeLibraryApplication.ViewModels.Pages
 
         private void FilterExecute()
         {
-            ObservableCollection<Book> filter = new ObservableCollection<Book>();
+            ObservableCollection<Book> filter = EntityData;
 
             if (
                 !GenreCheckBoxFilter.Any(it => it.IsSelected)
@@ -65,52 +62,24 @@ namespace HomeLibraryApplication.ViewModels.Pages
                 FilterReset();
                 return;
             }
+            if (GenreCheckBoxFilter.Any(it => it.IsSelected))
+                filter = filter.Where(
+                    it =>
+                    GenreCheckBoxFilter
+                    .Where(it => it.IsSelected)
+                    .Any(c => c.EntityID == it.Id)
+                    ).ToObservableCollection();
 
-            GenreCheckBoxFilter
-                .Where(it => it.IsSelected)
-                .Foreach(checkbox =>
-                {
-                    EntityData.Foreach(book =>
-                    {
-                        book.Genres.Foreach(genre =>
-                        {
-                            if (genre.Id == checkbox.EntityID && !filter.Contains(book))
-                                filter.Add(book);
-                        });
-                    });
-                });
+            if (AuthorCheckBoxFilter.Any(it => it.IsSelected))
+                filter = filter.Where(
+                    it =>
+                    AuthorCheckBoxFilter
+                    .Where(it => it.IsSelected)
+                    .Any(c => c.EntityID == it.Id)
+                    ).ToObservableCollection();
 
-            AuthorCheckBoxFilter
-                .Where(it => it.IsSelected)
-                .Foreach(checkbox =>
-                {
-                    EntityData.Foreach(book =>
-                    {
-                        book.Authors.Foreach(author =>
-                        {
-                            if (author.Id == checkbox.EntityID && !filter.Contains(book))
-                                filter.Add(book);
-                        });
-                    });
-                });
-
-            if (!BookTitleFilter.IsNullOrWhiteSpace())
-            {
-                if (filter.Count > 0)
-                    filter = filter.Where(it => it.Title.Contains(BookTitleFilter)).ToObservableCollection();
-
-                else
-                {
-                    EntityData
-                           .Where(it => it.Title.Contains(BookTitleFilter))
-                           .Foreach(book =>
-                           {
-                               if (!filter.Contains(book))
-                                   filter.Add(book);
-                           }
-                  );
-                }
-            }
+            if (BookTitleFilter.IsNotNullOrWhiteSpace())
+                filter = filter.Where(it => it.Title.Contains(BookTitleFilter)).ToObservableCollection();
 
             RenderList.Source = filter;
             RenderList.View.Refresh();

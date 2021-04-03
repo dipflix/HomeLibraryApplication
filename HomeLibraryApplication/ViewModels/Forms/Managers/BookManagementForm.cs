@@ -142,25 +142,26 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
             //  MessageBox.Show(isContain.ToString());
             //}
 
-   
-            //AuthorCheckBoxFilter.Foreach(item => {
 
-            //    var t = Entity.Authors.SingleOrDefault(it => it.Id == item.EntityID);
-            //    if (t == null && item.IsSelected == true)
-            //    {
-            //        var selected = Authors.Single(it => it.Id == item.EntityID);
-            //        if (selected != null)
-            //            Entity.Authors.Add(selected);
-            //         t = null;
-            //    }
+            AuthorCheckBoxFilter.Foreach(item =>
+            {
 
-            //    if (t != null && item.IsSelected == false)
-            //    {
-            //        Entity.Authors.Remove(t);
-            //        t = null;
-            //    }
+                var t = Entity.Authors.SingleOrDefault(it => it.Id == item.EntityID);
+                if (t == null && item.IsSelected == true)
+                {
+                    var selected = Authors.Single(it => it.Id == item.EntityID);
+                    if (selected != null)
+                        Entity.Authors.Add(selected);
+                    t = null;
+                }
 
-            //});
+                if (t != null && item.IsSelected == false)
+                {
+                    Entity.Authors.Remove(t);
+                    t = null;
+                }
+
+            });
 
             Entity.PicturePath = "/";
             base.ActionExecute();
