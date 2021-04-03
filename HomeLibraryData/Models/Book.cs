@@ -9,6 +9,8 @@ namespace HomeLibraryData.Models
     public class Book: Entity
     {
         [Required]
+        public string Title { get; set; }
+        [Required]
         public string Description { get; set; }
         public DateTime PublisingDate { get; set; }
 
@@ -19,5 +21,11 @@ namespace HomeLibraryData.Models
         public int Damaged { get; set; }
         public ICollection<Author> Authors { get; set; }
         public ICollection<Genre> Genres { get; set; }
+
+        public Book() {
+            Authors = new List<Author>();
+            Genres = new List<Genre>();
+        }
+        public override string ToLiteText() => Title;
     }
 }

@@ -1,9 +1,11 @@
 ﻿<Application x:Class="HomeLibraryApplication.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:HomeLibraryApplication"
-             StartupUri="Views/Window/MainWindow.xaml">
+             xmlns:ninject="clr-namespace:HomeLibraryApplication.Ninject"
+             StartupUri="Views/Window/MainWindow.xaml"
+             ShutdownMode="OnMainWindowClose"
+             >
     <Application.Resources>
-         
+        <ninject:ServiceLocator x:Key="ServiceLocator"/>
     </Application.Resources>
 </Application>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HomeLibraryService.Interfaces
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T: class
     {
         IQueryable<T> Items { get; }
 

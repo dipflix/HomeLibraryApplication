@@ -9,8 +9,14 @@ namespace HomeLibraryData.Models
     public class Genre: Entity
     {
         [Required]
+        public string Name { get; set; }
+        [Required]
         public string Description { get; set; }
         public ICollection<Book> Books { get; set; }
+        public Genre() {
+            Books = new List<Book>();
+        }
+        public override string ToLiteText() => Name;
 
     }
 }

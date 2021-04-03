@@ -1,7 +1,17 @@
-﻿namespace HomeLibraryData.Models.Base
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HomeLibraryData.Models.Base
 {
-    public abstract class Entity
+    public class Entity: IEntity
     {
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int Id { get; set; }
+
+        public virtual string ToLiteText()
+        {
+            return Id.ToString();
+        }
     }
 }

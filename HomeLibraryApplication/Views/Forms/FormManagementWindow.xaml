@@ -1,0 +1,19 @@
+﻿<Window x:Class="HomeLibraryApplication.Views.Forms.FormManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HomeLibraryApplication.Views.Forms"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="CanMinimize"
+        DataContext="{Binding Path=FormContextVM}"
+        Title="{Binding Title}" 
+        MinWidth="309">
+    <StackPanel Margin="16">
+        <ContentControl Content="{Binding ViewContext}" Margin="0 0 0 8"/>
+        <DockPanel HorizontalAlignment="Right">
+            <Button Content="OK" Command="{Binding ActionManagementCommand}" Padding="16 8 16 8"/>
+        </DockPanel>
+    </StackPanel>
+</Window>

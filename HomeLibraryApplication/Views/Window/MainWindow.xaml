@@ -3,34 +3,49 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HomeLibraryApplication" 
-        xmlns:uc="clr-namespace:HomeLibraryApplication.Views.Components"
+        xmlns:viewModelsPages ="clr-namespace:HomeLibraryApplication.ViewModels.Pages"
+        xmlns:views="clr-namespace:HomeLibraryApplication.Views.Pages"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-
+        DataContext="{Binding Path=AppVM, Source={StaticResource ServiceLocator}}"
+        Title="Home library"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="CanMinimize"
+        MinHeight="400"
+        MinWidth="256"
+        >
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModelsPages:GenrePageVM}">
+            <views:GenrePageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModelsPages:BooksPageVM}">
+            <views:BookPageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModelsPages:AuthorPageVM}">
+            <views:AuthorPageView/>
+        </DataTemplate>
+    </Window.Resources>
     <StackPanel >
         <Menu IsMainMenu="True" >
             <MenuItem 
                 Header="Books" 
-                Command="{Binding ShowBooksViewModelCommand}"
+                Command="{Binding ChangePageCommand}"
+                CommandParameter="bookPage"
                 Padding="16 8 16 8"
                 />
             <MenuItem 
                 Header="Genres" 
-                Command="{Binding ShowGenresViewModelCommand}"
+                Command="{Binding ChangePageCommand}"
+                 CommandParameter="genrePage"
                 Padding="16 8 16 8"/>
             <MenuItem 
                 Header="Authors" 
-                Command="{Binding ShowAuthorsViewModelCommand}"
+                Command="{Binding ChangePageCommand}"
+                 CommandParameter="authorPage"
                 Padding="16 8 16 8"/>
         </Menu>
 
         <StackPanel Margin="16">
-            <uc:OKButton Title="Save" Command=""/>
-            <uc:NamedTextBox TextBoxContext=""/>
-            <uc:NamedTextBox Title="Author" TextBoxContext=""/>
-            <uc:NamedTextBox Title="Author" TextBoxContext=""/>
-            <ContentControl Content="{Binding CurrentViewModel}" Margin="16"/>
+            <ContentControl Content="{Binding CurrentPage}" Margin="16"/>
         </StackPanel>
     </StackPanel>
 </Window>

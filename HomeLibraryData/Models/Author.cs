@@ -14,5 +14,11 @@ namespace HomeLibraryData.Models
         public string LastName { get; set; }
 
         public ICollection<Book> Books { get; set; }
+
+        public Author() {
+            Books = new List<Book>();
+        }
+
+        public override string ToLiteText() => $"{FirstName} {LastName}";
     }
 }
