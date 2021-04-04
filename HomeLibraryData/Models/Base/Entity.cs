@@ -5,7 +5,6 @@ namespace HomeLibraryData.Models.Base
 {
     public class Entity: IEntity
     {
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
 

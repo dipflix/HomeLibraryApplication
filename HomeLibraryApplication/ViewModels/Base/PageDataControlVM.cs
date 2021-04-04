@@ -29,8 +29,7 @@ namespace HomeLibraryApplication.ViewModels.Base
             get => _selectedEntity;
             set
             {
-                _selectedEntity = value;
-                OnPropertyChanged("SelectedEntity");
+                Set(ref _selectedEntity, value);
                 OnPropertyChanged("IsSelected");
             }
         }

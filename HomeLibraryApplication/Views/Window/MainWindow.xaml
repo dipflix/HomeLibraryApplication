@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModelsPages ="clr-namespace:HomeLibraryApplication.ViewModels.Pages"
-        xmlns:views="clr-namespace:HomeLibraryApplication.Views.Pages"
+        xmlns:views="clr-namespace:HomeLibraryApplication.Views.Pages" 
         mc:Ignorable="d"
         DataContext="{Binding Path=AppVM, Source={StaticResource ServiceLocator}}"
         Title="Home library"
@@ -14,6 +14,7 @@
         MinWidth="256"
         >
     <Window.Resources>
+       
         <DataTemplate DataType="{x:Type viewModelsPages:GenrePageVM}">
             <views:GenrePageView/>
         </DataTemplate>

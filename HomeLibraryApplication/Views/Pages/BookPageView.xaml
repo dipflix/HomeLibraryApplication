@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:HomeLibraryApplication.Helper.Converter"
              xmlns:local="clr-namespace:HomeLibraryApplication.Views.Pages"
              mc:Ignorable="d" >
+    <UserControl.Resources>
+        <converters:ImageToSourceConverter x:Key="ImageToSource"/>
+    </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
         <StackPanel MinWidth="200" Margin="0 0 16 0">
             <Label FontSize="18" 
@@ -23,7 +27,7 @@
             <StackPanel Margin="0 0 0 16">
                 <StackPanel>
                     <Label Content="Genres" Padding="0"  Margin="0 0 0 4"/>
-                    <ListBox ItemsSource="{Binding GenreCheckBoxFilter}" Height="128" Margin="0 0 0 16">
+                    <ListBox ItemsSource="{Binding GenreCheckBoxFilter}" Height="84" Margin="0 0 0 16">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}"/>
@@ -31,9 +35,9 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </StackPanel>
-                <StackPanel>
+                <StackPanel Margin="0 0 0 16">
                     <Label Content="Authors" Padding="0" Margin="0 0 0 4"/>
-                    <ListBox ItemsSource="{Binding  AuthorCheckBoxFilter}" Height="128" VerticalAlignment="Stretch" >
+                    <ListBox ItemsSource="{Binding  AuthorCheckBoxFilter}" Height="84" VerticalAlignment="Stretch" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}"/>
@@ -41,6 +45,20 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </StackPanel>
+                <StackPanel Margin="0 0 0 16">
+                    <Label Content="Damaged" Padding="0" Margin="0 0 0 4"/>
+                    <Slider Maximum="10" 
+                        TickPlacement="BottomRight" 
+                        TickFrequency="1"  
+                        IsSnapToTickEnabled="True" 
+                        Value="{Binding Entity.Damaged}"
+                        />
+                </StackPanel>
+                <StackPanel Margin="0 0 0 16">
+                    <Label Content="Publication date" Padding="0" Margin="0 0 0 4"/>
+                    <DatePicker SelectedDate="{Binding Entity.PublisingDate}" SelectedDateFormat="Short" />
+                </StackPanel>
+
             </StackPanel>
             <DockPanel HorizontalAlignment="Right">
                 <Button  Content="Filter"
@@ -54,17 +72,22 @@
             </DockPanel>
         </StackPanel>
         <StackPanel Width="400">
-            <Label Content="Books" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Books" FontSize="18" FontWeight="Bold" />
             <ListBox ItemsSource="{Binding RenderList.View}" SelectedItem="{Binding SelectedEntity}"
                       Background="Transparent"
                       Margin="0 16 0 0"
-                      Height="256"
+                      Height="325"
                       >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
-                            <Label Content="{Binding Title}"/>
-                           
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding PictureName, Converter={StaticResource ImageToSource}}" Width="82" />
+                                <StackPanel Margin="8 0 8 0">
+                                    <Label Content="{Binding Title}" FontWeight="Bold" FontSize="14"/>
+                                    <Label Content="{Binding PublisingDate}"/>
+                                </StackPanel>
+                            </StackPanel>
                         </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

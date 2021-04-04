@@ -54,7 +54,8 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 
             FormType = ManagmentType.ADD;
             Entity = new Book() { Damaged = 10 };
-
+            Entity.Genres = new ObservableCollection<Genre>();
+            Entity.Authors = new ObservableCollection<Author>();
             Validator = new BookEntityValidator(Entity);
             ImageLoaded = new Image();
         }
@@ -144,71 +145,72 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
         public override void ActionExecute()
         {
 
-            //if (!Validator.Validate())
-            //    ValidatorErrorNotifyExecute();
-            //else
-            //{
 
-            //Entity.Genres.AddItems(Genres.Where(
-            //        it =>
-            //        GenreCheckBoxFilter
-            //        .Where(it => it.IsSelected)
-            //        .Any(c => c.EntityID == it.Id)
-            //        ).ToList());
+            var addedItemGenre =
+                Genres.Where(
+                    genre =>
+                    GenreCheckBoxFilter
+                    .Where(checkbox => checkbox.IsSelected)
+                    .Any(checkbox => checkbox.EntityID == genre.Id)
+                    ).ToObservableCollection();
 
-            //GenreCheckBoxFilter.Foreach(item =>
-            //{
+            addedItemGenre = addedItemGenre.Where(genre => !Entity.Genres.Contains(genre)).ToObservableCollection();
 
-            //    var t = Entity.Genres.SingleOrDefault(it => it.Id == item.EntityID);
-            //    if (t != null && item.IsSelected == false)
-            //    {
-
-            //        Entity.Genres.Remove(t);
-
-            //        t = null;
-            //    }
-            //    if (t == null && item.IsSelected == true)
-            //    {
-            //        var selected = Genres.Single(it => it.Id == item.EntityID);
-            //        if (selected != null)
-            //        {
-            //            Entity.Genres.Add(selected);
-
-            //        }
-
-            //        t = null;
-            //        selected = null;
-            //    }
-            //});
-
-            //var test = Genres.Where(
-            //        it =>
-            //        GenreCheckBoxFilter
-            //        .Where(it => it.IsSelected)
-            //        .Any(c => c.EntityID == it.Id)
-            //        ).ToList();
-
-            //test.ForEach(it => Entity.Genres.Add(new Genre() { Id = it.Id }));
-
-            //Entity.Genres.AddItems(Genres.Where(
-            //        it =>
-            //        GenreCheckBoxFilter
-            //        .Where(it => it.IsSelected)
-            //        .Any(c => c.EntityID == it.Id)
-            //        ).ToList());
+            if(addedItemGenre.Count > 0)
+                Entity.Genres.AddItems(addedItemGenre);
 
 
-            var hash = new ImageHash().GetHash(_imageFile.FullName);
-            var hashImage = hash + ".jpg";
-            var fpname = AppData.PathResourceImages + hashImage;
+            var addedItemAuthor =
+                Authors.Where(
+                    author =>
+                    AuthorCheckBoxFilter
+                    .Where(checkbox => checkbox.IsSelected)
+                    .Any(checkbox => checkbox.EntityID == author.Id)
+                    ).ToObservableCollection();
 
-            if (!File.Exists(fpname))
-                _imageFile.CopyTo(fpname);
+            addedItemAuthor = addedItemAuthor.Where(author => !Entity.Authors.Contains(author)).ToObservableCollection();
 
-            Entity.PictureName = hashImage;
+            if (addedItemAuthor.Count > 0)
+                Entity.Authors.AddItems(addedItemAuthor);
+
+            var removedItemGenre =
+              Entity.Genres.Where(
+                  genre =>
+                      GenreCheckBoxFilter
+                      .Where(checkbox => !checkbox.IsSelected)
+                      .Any(checkbox => checkbox.EntityID == genre.Id)
+                  ).ToObservableCollection();
+
+
+            if (removedItemGenre.Count > 0)
+                Entity.Genres.RemoveItems(removedItemGenre);
+
+            var removedItemAuthor =
+             Entity.Authors.Where(
+                 author =>
+                     AuthorCheckBoxFilter
+                     .Where(checkbox => !checkbox.IsSelected)
+                     .Any(checkbox => checkbox.EntityID == author.Id)
+                 ).ToObservableCollection();
+
+            if (removedItemAuthor.Count > 0)
+                Entity.Authors.RemoveItems(removedItemAuthor);
+
+
+            if (_imageFile != null)
+            {
+                var hash = new ImageHash().GetHash(_imageFile.FullName);
+                var hashImage = hash + ".jpg";
+                var fpname = AppData.PathResourceImages + hashImage;
+
+                if (!File.Exists(fpname))
+                    _imageFile.CopyTo(fpname);
+
+                Entity.PictureName = hashImage;
+            }
 
             base.ActionExecute();
-            //}
+
 
         }
     }

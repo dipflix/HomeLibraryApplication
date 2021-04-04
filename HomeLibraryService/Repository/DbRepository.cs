@@ -35,9 +35,9 @@ namespace HomeLibraryService.Repository
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
-            _dbSet.Add(entity);
+            _dbSet.AddRange(entity);
 
-            _context.Entry(entity).State = EntityState.Added;
+           _context.Entry(entity).State = EntityState.Added;
 
             if (AutoSave) _context.SaveChanges();
 
@@ -97,13 +97,7 @@ namespace HomeLibraryService.Repository
             if (AutoSave) await _context.SaveChangesAsync(Cancel).ConfigureAwait(false);
         }
 
-        public void SaveOrder(ICollection<T> entityList)
-        {
-            foreach (T entity in entityList)
-            {
-                _context.Entry(entity).State = EntityState.Unchanged;
-            }
-        }
+ 
     }
 }
 

@@ -62,24 +62,27 @@ namespace HomeLibraryApplication.ViewModels.Pages
                 FilterReset();
                 return;
             }
+
+
             if (GenreCheckBoxFilter.Any(it => it.IsSelected))
                 filter = filter.Where(
-                    it =>
+                    book =>
                     GenreCheckBoxFilter
-                    .Where(it => it.IsSelected)
-                    .Any(c => c.EntityID == it.Id)
+                    .Where(checkbox => checkbox.IsSelected)
+                    .All(checkbox => book.Genres.Any(genre => genre.Id == checkbox.EntityID))
                     ).ToObservableCollection();
 
             if (AuthorCheckBoxFilter.Any(it => it.IsSelected))
                 filter = filter.Where(
-                    it =>
+                    book =>
                     AuthorCheckBoxFilter
-                    .Where(it => it.IsSelected)
-                    .Any(c => c.EntityID == it.Id)
+                    .Where(checkbox => checkbox.IsSelected)
+                    .All(checkbox => book.Authors.Any(author => author.Id == checkbox.EntityID))
                     ).ToObservableCollection();
 
+
             if (BookTitleFilter.IsNotNullOrWhiteSpace())
-                filter = filter.Where(it => it.Title.Contains(BookTitleFilter)).ToObservableCollection();
+                filter = filter.Where(it => it.Title.ToLower().Contains(BookTitleFilter.ToLower())).ToObservableCollection();
 
             RenderList.Source = filter;
             RenderList.View.Refresh();
