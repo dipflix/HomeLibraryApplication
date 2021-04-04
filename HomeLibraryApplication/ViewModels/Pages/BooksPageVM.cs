@@ -12,6 +12,7 @@ using System.Linq;
 using HomeLibraryApplication.Helper;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace HomeLibraryApplication.ViewModels.Pages
 {
@@ -24,6 +25,10 @@ namespace HomeLibraryApplication.ViewModels.Pages
         private readonly ObservableCollection<Genre> _genres;
         private readonly ObservableCollection<Author> _authors;
         private string _bookTitleFitler;
+        private DateTime _dateTimeFilter = DateTime.Now;
+        private int _damagedFilter;
+        private bool _isActiveDamagedFilter = false;
+        private bool _isActivePublishingDateFilter = false;
         public ObservableCollection<ActivityVM> GenreCheckBoxFilter { get; }
         public ObservableCollection<ActivityVM> AuthorCheckBoxFilter { get; }
 
@@ -33,15 +38,33 @@ namespace HomeLibraryApplication.ViewModels.Pages
             set => Set(ref _bookTitleFitler, value);
         }
 
+        public DateTime DateTimeFilter
+        {
+            get => _dateTimeFilter;
+            set => Set(ref _dateTimeFilter, value);
+        }
+        public int DamagedFilter
+        {
+            get => _damagedFilter;
+            set => Set(ref _damagedFilter, value);
+        }
+
+        public bool IsActiveDamagedFilter
+        {
+            get => _isActiveDamagedFilter;
+            set => Set(ref _isActiveDamagedFilter, value);
+        }  
+        public bool IsActivePublishingDateFilter
+        {
+            get => _isActivePublishingDateFilter;
+            set => Set(ref _isActivePublishingDateFilter, value);
+        }
         private ObservableCollection<Book> _bookRenderList;
 
         protected ObservableCollection<Book> BookRenderList
         {
             get => _bookRenderList;
-            set
-            {
-                Set(ref _bookRenderList, value);
-            }
+            set => Set(ref _bookRenderList, value);
         }
         public CollectionViewSource AuthorFilterView { get; private set; }
         public CollectionViewSource GenreFilterView { get; private set; }
@@ -57,12 +80,13 @@ namespace HomeLibraryApplication.ViewModels.Pages
                 !GenreCheckBoxFilter.Any(it => it.IsSelected)
                 && !AuthorCheckBoxFilter.Any(it => it.IsSelected)
                 && BookTitleFilter.IsNullOrWhiteSpace()
+                && !IsActivePublishingDateFilter
+                && !IsActiveDamagedFilter
                 )
             {
                 FilterReset();
                 return;
             }
-
 
             if (GenreCheckBoxFilter.Any(it => it.IsSelected))
                 filter = filter.Where(
@@ -84,6 +108,13 @@ namespace HomeLibraryApplication.ViewModels.Pages
             if (BookTitleFilter.IsNotNullOrWhiteSpace())
                 filter = filter.Where(it => it.Title.ToLower().Contains(BookTitleFilter.ToLower())).ToObservableCollection();
 
+            if (IsActiveDamagedFilter == true)
+                filter = filter.Where(book => book.Damaged == DamagedFilter).ToObservableCollection();
+            
+            if (IsActivePublishingDateFilter)
+                filter = filter.Where(book => book.PublisingDate == DateTimeFilter).ToObservableCollection();
+            
+
             RenderList.Source = filter;
             RenderList.View.Refresh();
         }
@@ -95,6 +126,8 @@ namespace HomeLibraryApplication.ViewModels.Pages
             BookTitleFilter = "";
             GenreCheckBoxFilter.Foreach(it => it.IsSelected = false);
             AuthorCheckBoxFilter.Foreach(it => it.IsSelected = false);
+            DamagedFilter = 0;
+            DateTimeFilter = DateTime.Now;
 
         }
         public BooksPageVM(

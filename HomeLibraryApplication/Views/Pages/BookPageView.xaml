@@ -8,6 +8,8 @@
              mc:Ignorable="d" >
     <UserControl.Resources>
         <converters:ImageToSourceConverter x:Key="ImageToSource"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <converters:CollectionToTextConverter x:Key="CollectionToText"/>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
         <StackPanel MinWidth="200" Margin="0 0 16 0">
@@ -45,20 +47,28 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </StackPanel>
-                <StackPanel Margin="0 0 0 16">
-                    <Label Content="Damaged" Padding="0" Margin="0 0 0 4"/>
-                    <Slider Maximum="10" 
+
+                <StackPanel Margin="0 16 0 16" IsEnabled="{Binding IsActiveOtherFilter}">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsActiveDamagedFilter}"/>
+                        <StackPanel Margin="0 0 0 16" IsEnabled="{Binding IsActiveDamagedFilter}">
+                            <Label Content="Damaged" Padding="0" Margin="0 0 0 4"/>
+                            <Slider Maximum="10" 
                         TickPlacement="BottomRight" 
                         TickFrequency="1"  
                         IsSnapToTickEnabled="True" 
-                        Value="{Binding Entity.Damaged}"
+                        Value="{Binding DamagedFilter}" Width="176"
                         />
+                        </StackPanel> 
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox VerticalAlignment="Center" Margin="0 0 8 0" IsChecked="{Binding IsActivePublishingDateFilter}"/>
+                        <StackPanel Margin="0 0 0 16" IsEnabled="{Binding IsActivePublishingDateFilter}">
+                            <Label Content="Publication date" Padding="0" Margin="0 0 0 4"/>
+                            <DatePicker SelectedDate="{Binding DateTimeFilter}" SelectedDateFormat="Short" Width="172" />
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Margin="0 0 0 16">
-                    <Label Content="Publication date" Padding="0" Margin="0 0 0 4"/>
-                    <DatePicker SelectedDate="{Binding Entity.PublisingDate}" SelectedDateFormat="Short" />
-                </StackPanel>
-
             </StackPanel>
             <DockPanel HorizontalAlignment="Right">
                 <Button  Content="Filter"
@@ -68,7 +78,7 @@
                      Padding="16 8 16 8"
                          Margin="8 0 0 0"
                      Command="{Binding FilterClearCommand}"/>
-                
+
             </DockPanel>
         </StackPanel>
         <StackPanel Width="400">
@@ -76,7 +86,7 @@
             <ListBox ItemsSource="{Binding RenderList.View}" SelectedItem="{Binding SelectedEntity}"
                       Background="Transparent"
                       Margin="0 16 0 0"
-                      Height="325"
+                      MinHeight="300"
                       >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -107,6 +117,52 @@
                    Padding="0"
                    Content="View"
                     />
+            <ScrollViewer Margin="32 0 32 0" Height="450" Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibility}}">
+                <StackPanel>
+                    <TextBox 
+                            Text="{Binding SelectedEntity.Title}" 
+                            FontSize="24" 
+                            FontWeight="Black" 
+                            HorizontalAlignment="Center"
+                            IsReadOnly="True" 
+                            TextWrapping="Wrap"
+                            BorderThickness="0"
+                            Padding="0 16 0 16"
+                            Margin="0 0 0 16"
+                    />
+                    <Image Source="{Binding SelectedEntity.PictureName, Converter={StaticResource ImageToSource}}" Height="300" Margin="0 0 0 16" />
+
+                    <StackPanel Margin="0 0 0 16">
+                        <Label Content="Description"  FontWeight="Light"/>
+                        <TextBox 
+                            Text="{Binding SelectedEntity.Description}" 
+                            FontSize="14" 
+                            MaxHeight="128"  
+                            IsReadOnly="True" 
+                            TextWrapping="Wrap"
+                            BorderThickness="0"
+                            Padding="0 16 0 16"
+                            HorizontalScrollBarVisibility="Visible"
+                    />
+                    </StackPanel>
+                    <StackPanel Margin="0 0 0 16">
+                        <Label Content="Publising date"  FontSize="14" FontWeight="Light"/>
+                        <Label Content="{Binding SelectedEntity.PublisingDate}" />
+                    </StackPanel>
+                    <StackPanel Margin="0 0 0 16">
+                        <Label Content="Damaged"  FontWeight="Light"/>
+                        <Label Content="{Binding SelectedEntity.Damaged}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 0 0 16">
+                        <Label Content="Genres"  FontWeight="Light"/>
+                        <Label Content="{Binding SelectedEntity.Genres, Converter={StaticResource CollectionToText}}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 0 0 16">
+                        <Label Content="Authors"  FontWeight="Light"/>
+                        <Label Content="{Binding SelectedEntity.Authors, Converter={StaticResource CollectionToText}}"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </StackPanel>
     </StackPanel>
 </UserControl>
