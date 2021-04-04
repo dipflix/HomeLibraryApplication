@@ -25,8 +25,8 @@ namespace HomeLibraryApplication.Validators
             if (Entity.Authors.Count < 1)
                 ErrorCollection.Add(nameof(Entity.Authors), "Authors count must not be less than 1, select more please!");
 
-            if(string.IsNullOrEmpty(Entity.PicturePath))
-                ErrorCollection.Add(nameof(Entity.PicturePath), "Book image must not be enmpty. Please load image!");
+            if(string.IsNullOrEmpty(Entity.PictureName))
+                ErrorCollection.Add(nameof(Entity.PictureName), "Book image must not be enmpty. Please load image!");
 
             return base.Validate();
         }

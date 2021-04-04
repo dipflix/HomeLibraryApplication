@@ -4,34 +4,43 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HomeLibraryApplication.Views.Managements"
-             mc:Ignorable="d" 
->
-    <ScrollViewer VerticalScrollBarVisibility="Visible"
-                  HorizontalScrollBarVisibility="Disabled"  
-                  HorizontalAlignment="Left"
-                  MaxHeight="600"
-                 >
-        <StackPanel Width="309" Margin="16">
-            <StackPanel Margin="0 0 0 16">
-                <Label Content="Title"/>
-                <TextBox Text="{Binding Entity.Title}" 
+             mc:Ignorable="d">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Width="128">
+                <StackPanel Margin="0 0 0 16">
+                    <Label Content="Title"/>
+                    <TextBox Text="{Binding Entity.Title}" 
                          Height="32"/>
-            </StackPanel>
-            <StackPanel Margin="0 0 0 16">
-                <Label Content="Description"/>
-                <TextBox AcceptsReturn="True" 
+                </StackPanel>
+                <StackPanel Margin="0 0 0 16">
+                    <Label Content="Description"/>
+                    <TextBox AcceptsReturn="True" 
                  Text="{Binding Entity.Description}" 
                  TextWrapping="Wrap" 
                  Height="128"
                  VerticalContentAlignment="Top"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  />
+                </StackPanel>
+                <StackPanel Margin="0 0 0 16">
+                    <Label Content="Publication date"/>
+                    <DatePicker SelectedDate="{Binding Entity.PublisingDate}" SelectedDateFormat="Short" />
+                </StackPanel>
+
+
+                <StackPanel Margin="0 0 0 16">
+                    <Label Content="Damaged" Padding="0" Margin="0 0 0 4"/>
+                    <Slider Maximum="10" 
+                        TickPlacement="BottomRight" 
+                        TickFrequency="1"  
+                        IsSnapToTickEnabled="True" 
+                        Value="{Binding Entity.Damaged}"
+                        />
+                </StackPanel>
+
             </StackPanel>
-            <StackPanel Margin="0 0 0 16">
-                <Label Content="Publication date"/>
-                <DatePicker SelectedDate="{Binding Entity.PublisingDate}" SelectedDateFormat="Short" />
-            </StackPanel>
-            <StackPanel Margin="0 0 0 16">
+            <StackPanel Width="128" Margin="16 0 0 0">
                 <StackPanel>
                     <Label Content="Genres" Padding="0"  Margin="0 0 0 4"/>
                     <ListBox ItemsSource="{Binding GenreCheckBoxFilter}" Height="128" Margin="0 0 0 16">
@@ -53,21 +62,13 @@
                     </ListBox>
                 </StackPanel>
             </StackPanel>
-
-            <StackPanel Margin="0 0 0 16">
-                <Label Content="Damaged" Padding="0" Margin="0 0 0 4"/>
-                <Slider Maximum="10" 
-                        TickPlacement="BottomRight" 
-                        TickFrequency="1"  
-                        IsSnapToTickEnabled="True" 
-                        Value="{Binding Entity.Damaged}"
-                        />
-            </StackPanel>
-            <StackPanel Margin="0 0 0 16">
-                <Label Content="Image" Padding="0" Margin="0 0 0 4"/>
-                <Image Source="{Binding BookImage}" Margin="0 0 0 16"/>
-                <Button Content="Load image" Command="{Binding LoadImageCommand}"/>
+            <StackPanel Width="200">
+                <StackPanel Margin="16 0 0 0">
+                    <Label Content="Image" Padding="0" Margin="0 0 0 4"/>
+                    <Image Source="{Binding ImageLoaded.Source}" Margin="0 0 0 16" Height="256"/>
+                    <Button Content="Load image" Command="{Binding LoadImageCommand}"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
-    </ScrollViewer>
+    </StackPanel>
 </UserControl>
