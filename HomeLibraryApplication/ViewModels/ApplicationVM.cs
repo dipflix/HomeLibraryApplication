@@ -54,7 +54,7 @@ namespace HomeLibraryApplication.ViewModels
             var genrePage = new GenrePageVM(_genreRepo, dialogFormService);
             var authorPage = new AuthorPageVM(_authorRepo, dialogFormService);
             var bookPage = new BooksPageVM(_bookRepo, dialogFormService, genrePage.EntityData, authorPage.EntityData);
-            //genrePage.EntityData.CollectionChanged += (sender, e) => { MessageBox.Show("changed"); };
+      
             _pages = new Dictionary<string, ViewModel>();
 
             _pages.Add("bookPage", bookPage);

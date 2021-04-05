@@ -14,8 +14,8 @@ namespace HomeLibraryService.Repository
     public class DbRepository<T> : IRepository<T> where T : Entity, new()
     {
         public bool AutoSave { get; set; } = true;
-        private readonly DBContext _context;
-        private DbSet<T> _dbSet;
+        protected readonly DBContext _context;
+        protected DbSet<T> _dbSet;
         public virtual IQueryable<T> Items => _dbSet;
         public DbRepository()
         {
@@ -35,8 +35,6 @@ namespace HomeLibraryService.Repository
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
-            _dbSet.AddRange(entity);
-
            _context.Entry(entity).State = EntityState.Added;
 
             if (AutoSave) _context.SaveChanges();
@@ -47,7 +45,7 @@ namespace HomeLibraryService.Repository
         public async Task<T> AddAsync(T entity, CancellationToken Cancel = default)
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
-            //_context.Entry(entity).State = EntityState.Added;
+            _context.Entry(entity).State = EntityState.Added;
 
             if (AutoSave) await _context.SaveChangesAsync(Cancel).ConfigureAwait(false);
 
@@ -59,10 +57,7 @@ namespace HomeLibraryService.Repository
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
-     
             var item = Get(entity.Id);
-          
-
             _context.Entry(item).CurrentValues.SetValues(entity);
             
             if (AutoSave) _context.SaveChanges();

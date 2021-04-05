@@ -19,6 +19,8 @@ namespace HomeLibraryApplication.ViewModels.Pages
     public class BooksPageVM : PageDataControlVM<Book>
     {
         private IRepository<Book> _repository;
+        private IRepository<Genre> _repositoryGenre;
+        private IRepository<Author> _repositoryAuthor;
 
         private ICommand _filterCommand;
 
@@ -163,7 +165,7 @@ namespace HomeLibraryApplication.ViewModels.Pages
 
             OpenEditManagerCommand = new LambdaCommand(
                 () => OpenForm(
-                    new BookManagementForm(_repository, SelectedEntity, _genres, _authors, GenreCheckBoxFilter, AuthorCheckBoxFilter)));
+                    new BookManagementForm(_repository,SelectedEntity, _genres, _authors, GenreCheckBoxFilter, AuthorCheckBoxFilter)));
 
             _ = LoadData();
 

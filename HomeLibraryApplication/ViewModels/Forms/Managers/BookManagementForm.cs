@@ -26,7 +26,6 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 {
     public class BookManagementForm : ManagementFormContextBaseVM<Book>
     {
-
         private ICommand _loadImageCommand;
         public ICommand LoadImageCommand => _loadImageCommand ??= new LambdaCommand(LoadImageExecute);
 
@@ -47,6 +46,7 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 
             ) : base("Create book", new BookControlContext(), repository)
         {
+
             Genres = genres;
             Authors = authors;
             GenreCheckBoxFilter = genreCheckBoxFilter.CloneActivityVM();
@@ -57,7 +57,6 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
             Entity.Genres = new ObservableCollection<Genre>();
             Entity.Authors = new ObservableCollection<Author>();
             Validator = new BookEntityValidator(Entity);
-            ImageLoaded = new Image();
         }
 
         public BookManagementForm(
@@ -88,16 +87,7 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
             };
 
             Validator = new BookEntityValidator(Entity);
-            ImageLoaded = new Image();
 
-            if (Entity.PictureName.IsNotNullOrEmpty())
-            {
-
-                string uriText = Directory.GetCurrentDirectory() + AppData.PathResourceImages + Entity.PictureName;
-                ImageLoaded.Source = new BitmapImage(new Uri(uriText));
-                OnPropertyChanged("ImageLoaded");
-
-            }
 
             Entity.Genres.Foreach(genre =>
             {
@@ -144,57 +134,77 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 
         public override void ActionExecute()
         {
-
-
             var addedItemGenre =
-                Genres.Where(
-                    genre =>
-                    GenreCheckBoxFilter
-                    .Where(checkbox => checkbox.IsSelected)
-                    .Any(checkbox => checkbox.EntityID == genre.Id)
-                    ).ToObservableCollection();
-
-            addedItemGenre = addedItemGenre.Where(genre => !Entity.Genres.Contains(genre)).ToObservableCollection();
-
-            if(addedItemGenre.Count > 0)
-                Entity.Genres.AddItems(addedItemGenre);
+                 Genres
+                 .Where(genre => GenreCheckBoxFilter
+                 .Where(checkbox => checkbox.IsSelected).Any(checkbox => checkbox.EntityID == genre.Id))
+                 .ToObservableCollection();
 
 
-            var addedItemAuthor =
-                Authors.Where(
-                    author =>
-                    AuthorCheckBoxFilter
-                    .Where(checkbox => checkbox.IsSelected)
-                    .Any(checkbox => checkbox.EntityID == author.Id)
-                    ).ToObservableCollection();
-
-            addedItemAuthor = addedItemAuthor.Where(author => !Entity.Authors.Contains(author)).ToObservableCollection();
-
-            if (addedItemAuthor.Count > 0)
-                Entity.Authors.AddItems(addedItemAuthor);
-
-            var removedItemGenre =
-              Entity.Genres.Where(
-                  genre =>
-                      GenreCheckBoxFilter
-                      .Where(checkbox => !checkbox.IsSelected)
-                      .Any(checkbox => checkbox.EntityID == genre.Id)
-                  ).ToObservableCollection();
+            var test = addedItemGenre.Where(item => Entity.Genres.Any(it => it.Id != item.Id));
+            Entity.Genres.AddItems(test);
 
 
-            if (removedItemGenre.Count > 0)
-                Entity.Genres.RemoveItems(removedItemGenre);
 
-            var removedItemAuthor =
-             Entity.Authors.Where(
-                 author =>
-                     AuthorCheckBoxFilter
-                     .Where(checkbox => !checkbox.IsSelected)
-                     .Any(checkbox => checkbox.EntityID == author.Id)
-                 ).ToObservableCollection();
+            var removedGenre =
+                 Genres
+                 .Where(genre => GenreCheckBoxFilter
+                 .Where(checkbox => !checkbox.IsSelected).Any(checkbox => checkbox.EntityID == genre.Id))
+                 .Where(genre => Entity.Genres.Any(entity => entity.Id == genre.Id)).ToObservableCollection();
 
-            if (removedItemAuthor.Count > 0)
-                Entity.Authors.RemoveItems(removedItemAuthor);
+            if (removedGenre.Count > 0)
+                Entity.Genres.RemoveItems(removedGenre);
+
+
+            //var addedItemGenre =
+            //    Genres.Where(
+            //        genre =>
+            //        GenreCheckBoxFilter
+            //        .Where(checkbox => checkbox.IsSelected)
+            //        .Any(checkbox => genre.Id == checkbox.EntityID)
+            //        ).Where(it => !Entity.Genres.Contains(it)).ToObservableCollection();
+
+            ////addedItemGenre = addedItemGenre.Where(genre => !Entity.Genres.Contains(genre)).ToObservableCollection();
+
+            //if(addedItemGenre.Count > 0)
+            //    Entity.Genres.AddItems(addedItemGenre);
+
+
+            //var addedItemAuthor =
+            //    Authors.Where(
+            //        author =>
+            //        AuthorCheckBoxFilter
+            //        .Where(checkbox => checkbox.IsSelected)
+            //        .Any(checkbox => checkbox.EntityID == author.Id)
+            //        ).ToObservableCollection();
+
+            //addedItemAuthor = addedItemAuthor.Where(author => !Entity.Authors.Contains(author)).ToObservableCollection();
+
+            //if (addedItemAuthor.Count > 0)
+            //    Entity.Authors.AddItems(addedItemAuthor);
+
+            //var removedItemGenre =
+            //  Entity.Genres.Where(
+            //      genre =>
+            //          GenreCheckBoxFilter
+            //          .Where(checkbox => !checkbox.IsSelected)
+            //          .Any(checkbox => checkbox.EntityID == genre.Id)
+            //      ).ToObservableCollection();
+
+
+            //if (removedItemGenre.Count > 0)
+            //    Entity.Genres.RemoveItems(removedItemGenre);
+
+            //var removedItemAuthor =
+            // Entity.Authors.Where(
+            //     author =>
+            //         AuthorCheckBoxFilter
+            //         .Where(checkbox => !checkbox.IsSelected)
+            //         .Any(checkbox => checkbox.EntityID == author.Id)
+            //     ).ToObservableCollection();
+
+            //if (removedItemAuthor.Count > 0)
+            //    Entity.Authors.RemoveItems(removedItemAuthor);
 
 
             if (_imageFile != null)

@@ -3,8 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HomeLibraryApplication.Views.Managements"
+             xmlns:local="clr-namespace:HomeLibraryApplication.Views.Managements" xmlns:converters="clr-namespace:HomeLibraryApplication.Helper.Converter"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:ImageToSourceConverter x:Key="ImageToSource"/>
+    </UserControl.Resources>
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <StackPanel Width="128">
@@ -65,7 +68,7 @@
             <StackPanel Width="200">
                 <StackPanel Margin="16 0 0 0">
                     <Label Content="Image" Padding="0" Margin="0 0 0 4"/>
-                    <Image Source="{Binding ImageLoaded.Source}" Margin="0 0 0 16" Height="256"/>
+                    <Image Source="{Binding Entity.PictureName,  Converter={StaticResource ImageToSource}}" Margin="0 0 0 16" Height="256"/>
                     <Button Content="Load image" Command="{Binding LoadImageCommand}"/>
                 </StackPanel>
             </StackPanel>
