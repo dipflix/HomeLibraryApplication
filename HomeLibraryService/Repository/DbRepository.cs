@@ -33,7 +33,7 @@ namespace HomeLibraryService.Repository
 
         public T Add(T entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity));
+            if (entity is null) throw new ArgumentNullException(nameof(entity)); 
 
            _context.Entry(entity).State = EntityState.Added;
 

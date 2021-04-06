@@ -12,13 +12,18 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 
     {
 
-        public AuthorManagementForm(IRepository<Author> repository) : base("Create author", new AuthorControlContext(), repository)
+        private AuthorManagementForm(IRepository<Author> repository, string formName) : base(formName, new AuthorControlContext(), repository)
+        {
+            Validator = new AuthorEntityValidator(Entity);
+        }
+
+        public AuthorManagementForm(IRepository<Author> repository) : this(repository, "Create author")
         {
             FormType = ManagmentType.ADD;
             Entity = new Author();
-            Validator = new AuthorEntityValidator(Entity);
+            
         }
-        public AuthorManagementForm(IRepository<Author> repository, Author entity) : base("Edit author", new AuthorControlContext(), repository)
+        public AuthorManagementForm(IRepository<Author> repository, Author entity) :this(repository, "Edit author")
         {
             FormType = ManagmentType.UPDATE;
             Entity = new Author()
@@ -29,7 +34,6 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
                 Books = entity.Books
             };
 
-            Validator = new AuthorEntityValidator(Entity);
         }
 
         public override void ActionExecute()

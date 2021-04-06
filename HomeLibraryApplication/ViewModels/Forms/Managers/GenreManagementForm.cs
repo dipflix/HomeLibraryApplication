@@ -16,14 +16,18 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 {
     public class GenreManagementForm : ManagementFormContextBaseVM<Genre>
     {
-        public GenreManagementForm(IRepository<Genre> repository) : base("Create genre", new GenreControlContext(), repository)
+        private GenreManagementForm(IRepository<Genre> repository, string formName) : base(formName, new GenreControlContext(), repository)
+        {
+            Validator = new GenreEntityValidator(Entity);
+        }
+        public GenreManagementForm(IRepository<Genre> repository) : this(repository, "Create genre")
         {
             FormType = ManagmentType.ADD;
             Entity = new Genre();
-            Validator = new GenreEntityValidator(Entity);
         }
 
-        public GenreManagementForm(IRepository<Genre> repository, in Genre entity) : base("Edit genre", new GenreControlContext(), repository)
+        public GenreManagementForm(IRepository<Genre> repository, in Genre entity) : this(repository, "Edit genre")
+
         {
             FormType = ManagmentType.UPDATE;
             Entity = new Genre()
@@ -33,7 +37,6 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
                 Name = entity.Name,
                 Books = entity.Books
             };
-            Validator = new GenreEntityValidator(Entity);
         }
 
         public override void ActionExecute()

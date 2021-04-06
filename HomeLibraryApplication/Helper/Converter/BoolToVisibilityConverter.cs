@@ -9,6 +9,7 @@ namespace HomeLibraryApplication.Helper.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value.IsNull()) return null;
             return (bool)value ? Visibility.Visible : Visibility.Hidden;
         }
 

@@ -21,6 +21,6 @@ namespace HomeLibraryService.Interfaces
         void Remove(int id);
         Task RemoveAsync(int id, CancellationToken Cancel = default);
 
-    
+        
     }
 }

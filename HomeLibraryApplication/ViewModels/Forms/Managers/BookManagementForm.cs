@@ -6,6 +6,7 @@ using HomeLibraryApplication.ViewModels.Base;
 using HomeLibraryApplication.Views.Managements;
 using HomeLibraryData.Models;
 using HomeLibraryService.Interfaces;
+using HomeLibraryService.Repository;
 using MathCore.WPF.Commands;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
@@ -26,6 +27,8 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
 {
     public class BookManagementForm : ManagementFormContextBaseVM<Book>
     {
+
+        private BookRepository bookRepository;
         private ICommand _loadImageCommand;
         public ICommand LoadImageCommand => _loadImageCommand ??= new LambdaCommand(LoadImageExecute);
 
@@ -37,6 +40,24 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
         public Image ImageLoaded { get; set; }
         private FileInfo _imageFile;
 
+
+        private BookManagementForm(
+            IRepository<Book> repository,
+            ObservableCollection<Genre> genres,
+            ObservableCollection<Author> authors,
+            ObservableCollection<ActivityVM> genreCheckBoxFilter,
+            ObservableCollection<ActivityVM> authorCheckBoxFilter, string formName) : base(formName, new BookControlContext(), repository)
+        {
+            Genres = genres;
+            Authors = authors;
+
+            bookRepository = new BookRepository();
+
+            GenreCheckBoxFilter = genreCheckBoxFilter.CloneActivityVM();
+            AuthorCheckBoxFilter = authorCheckBoxFilter.CloneActivityVM();
+            Validator = new BookEntityValidator(Entity);
+        }
+
         public BookManagementForm(
             IRepository<Book> repository,
             ObservableCollection<Genre> genres,
@@ -44,19 +65,11 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
             ObservableCollection<ActivityVM> genreCheckBoxFilter,
             ObservableCollection<ActivityVM> authorCheckBoxFilter
 
-            ) : base("Create book", new BookControlContext(), repository)
+            ) : this(repository, genres, authors, genreCheckBoxFilter, authorCheckBoxFilter, "Create book")
         {
-
-            Genres = genres;
-            Authors = authors;
-            GenreCheckBoxFilter = genreCheckBoxFilter.CloneActivityVM();
-            AuthorCheckBoxFilter = authorCheckBoxFilter.CloneActivityVM();
 
             FormType = ManagmentType.ADD;
             Entity = new Book() { Damaged = 10 };
-            Entity.Genres = new ObservableCollection<Genre>();
-            Entity.Authors = new ObservableCollection<Author>();
-            Validator = new BookEntityValidator(Entity);
         }
 
         public BookManagementForm(
@@ -66,12 +79,9 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
             ObservableCollection<Author> authors,
             ObservableCollection<ActivityVM> genreCheckBoxFilter,
             ObservableCollection<ActivityVM> authorCheckBoxFilter
-            ) : base("Edit book", new BookControlContext(), repository)
+            ) : this(repository, genres, authors, genreCheckBoxFilter, authorCheckBoxFilter, "Edit book")
         {
-            Genres = genres;
-            Authors = authors;
-            GenreCheckBoxFilter = genreCheckBoxFilter.CloneActivityVM();
-            AuthorCheckBoxFilter = authorCheckBoxFilter.CloneActivityVM();
+       
 
             FormType = ManagmentType.UPDATE;
             Entity = new Book()
@@ -85,9 +95,6 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
                 PictureName = entity.PictureName,
                 PublisingDate = entity.PublisingDate
             };
-
-            Validator = new BookEntityValidator(Entity);
-
 
             Entity.Genres.Foreach(genre =>
             {
@@ -141,19 +148,18 @@ namespace HomeLibraryApplication.ViewModels.Forms.Managers
                  .ToObservableCollection();
 
 
-            var test = addedItemGenre.Where(item => Entity.Genres.Any(it => it.Id != item.Id));
-            Entity.Genres.AddItems(test);
+          
+            Entity.Genres.AddItems(addedItemGenre.Where(item => Entity.Genres.Any(it => it.Id != item.Id)));
 
 
+            //var removedGenre =
+            //     Genres
+            //     .Where(genre => GenreCheckBoxFilter
+            //     .Where(checkbox => !checkbox.IsSelected).Any(checkbox => checkbox.EntityID == genre.Id))
+            //     .Where(genre => Entity.Genres.Any(entity => entity.Id == genre.Id)).ToObservableCollection();
 
-            var removedGenre =
-                 Genres
-                 .Where(genre => GenreCheckBoxFilter
-                 .Where(checkbox => !checkbox.IsSelected).Any(checkbox => checkbox.EntityID == genre.Id))
-                 .Where(genre => Entity.Genres.Any(entity => entity.Id == genre.Id)).ToObservableCollection();
-
-            if (removedGenre.Count > 0)
-                Entity.Genres.RemoveItems(removedGenre);
+            //if (removedGenre.Count > 0)
+            //    Entity.Genres.RemoveItems(removedGenre);
 
 
             //var addedItemGenre =
